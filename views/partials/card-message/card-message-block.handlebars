@@ -1,0 +1,17 @@
+<ul id="ul-comments-{{data._id}}" class="list-group">
+{{#each data.commentList}}
+  {{> message/message-block data=this}}
+{{/each}}
+</ul>
+
+<form>
+  <div class="form-group">
+    <label for="input-username-{{data._id}}">Username</label>
+    <input type="text" class="form-control" id="input-username-{{data._id}}" placeholder="Username">    
+  </div>
+  <div class="form-group">
+    <label for="textarea-message-{{data._id}}">Message</label>
+    <textarea class="form-control" id="textarea-message-{{data._id}}" rows="3"></textarea>
+  </div>
+  <button data-article-id="{{data._id}}" type="submit" class="btn btn-primary btn-new-message">Post</button>
+</form>

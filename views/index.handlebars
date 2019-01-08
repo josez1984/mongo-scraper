@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Mongo DB/Express News Scraper</h1>
+  <div class="row">
+    <div class="col">
+      <p>Scrape New articles</p>
+      <form action="/scrape" method="get">
+        <button id="btn-scrape-articles" type="submit" class="btn btn-primary">Scrape</button>    
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="accordion" id="accordionExample">
+      {{#each articles}}    
+        {{> card/card-block data=this}}
+      {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
