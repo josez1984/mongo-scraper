@@ -13,7 +13,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -32,7 +32,8 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mongo-news-scraper", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongo-scraper";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 app.delete("/comments", (req,res)=>{
@@ -53,18 +54,6 @@ app.delete("/comments", (req,res)=>{
       message: "Database error"
     });
   });
-
-//   update({}, {
-//     $pull: {
-//        'widgets.commands._id': req.params.id,
-//     },
-// });
-
-  // db.Article.deleteOne({
-  //   commentList
-  // }, (err)=>{
-  //   console.log(err);
-  // });
 });
 
 app.get("/", function(req, res) {
@@ -90,9 +79,6 @@ app.get("/", function(req, res) {
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
-  // db.Article.deleteMany({}, (err)=>{
-  //   console.log(err);
-  // });
   axios.get("http://www.southernillinoisnow.com/local-news/").then(function(response) {
     var $ = cheerio.load(response.data);
     $(".post-content").each(function(i, element) {
@@ -113,37 +99,6 @@ app.get("/scrape", function(req, res) {
   });
 });
 
-// // Route for getting all Articles from the db
-// app.get("/articles", function(req, res) {
-//   // Grab every document in the Articles collection
-//   db.Article.find({})
-//     .then(function(dbArticle) {
-//       // If we were able to successfully find Articles, send them back to the client
-//       res.json(dbArticle);
-//     })
-//     .catch(function(err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-// });
-
-// Route for grabbing a specific Article by id, populate it with it's note
-// app.get("/articles/:id", function(req, res) {
-//   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-//   db.Article.findOne({ _id: req.params.id })
-//     // ..and populate all of the notes associated with it
-//     .populate("note")
-//     .then(function(dbArticle) {
-//       // If we were able to successfully find an Article with the given id, send it back to the client
-//       res.json(dbArticle);
-//     })
-//     .catch(function(err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-// });
-
-//Route for saving/updating an Article's associated Note
 app.post("/comments", function(req, res) {
   let commentId = uuid.v1();
   db.Article.findOneAndUpdate({ 
@@ -162,7 +117,8 @@ app.post("/comments", function(req, res) {
     return res.json({
       message: req.body.message,
       userName: req.body.userName,
-      id: commentId
+      id: commentId,
+      articleId: req.body.articleId
     });    
   }).catch(function(err){
     return res.status(500).json(err);

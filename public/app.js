@@ -1,6 +1,18 @@
 $(document).ready(function() {
   $(".collapse").collapse();
   
+  $("#btn-scrape-articles").on("click", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "GET",
+      url: '/scrape'
+    }).then((res)=>{
+      window.location.reload();
+    }).catch((e)=>{
+      alert("There was an error scraping for new articles.");
+    });
+  });
+
   $("#accordionExample").on("click", ".btn-delete-comment", function(e) {
     e.preventDefault();
     let commentId = $(this).attr("data-comment-id");
