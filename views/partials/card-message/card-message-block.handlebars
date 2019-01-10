@@ -1,6 +1,6 @@
 <ul id="ul-comments-{{data._id}}" class="list-group">
 {{#each data.commentList}}
-  {{> message/message-block data=this}}
+  {{> message/message-block comments=this}}
 {{/each}}
 </ul>
 

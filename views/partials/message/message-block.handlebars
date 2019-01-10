@@ -1,7 +1,7 @@
-<li class="list-group-item">
-  <h6>{{data.userName}}</h6>
-  <p>{{data.message}}</p>
-  <button type="button" class="close" aria-label="Close">
+<li id="li-comment-{{comments.id}}" class="list-group-item">
+  <h6>{{comments.userName}}</h6>
+  <p>{{comments.message}}</p>
+  <button data-article-id="{{comments.articleId}}" data-comment-id="{{comments.id}}" type="button" class="close btn-delete-comment" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </li>
